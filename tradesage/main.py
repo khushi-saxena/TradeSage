@@ -24,10 +24,37 @@ def main():
     bt = Backtester(data, strat, initial_capital=args.initial_capital)
     # run
     stats = bt.run()
-    # report
-    print("Backtest Results:")
-    for k, v in stats.items():
-        print(f"  {k}: {v:.4f}")
+    # report comprehensive results
+    print("=" * 60)
+    print("📊 TRADESAGE BACKTEST RESULTS")
+    print("=" * 60)
+    
+    # Core Performance Metrics
+    print("\n🎯 CORE PERFORMANCE METRICS:")
+    print("-" * 40)
+    print(f"  Cumulative Return:     {stats['Cumulative Return']:.2%}")
+    print(f"  Annualized Return:     {stats['Annualized Return']:.2%}")
+    print(f"  Annualized Volatility: {stats['Annualized Volatility']:.2%}")
+    print(f"  Sharpe Ratio:          {stats['Sharpe Ratio']:.3f}")
+    print(f"  Sortino Ratio:         {stats['Sortino Ratio']:.3f}")
+    print(f"  Calmar Ratio:          {stats['Calmar Ratio']:.3f}")
+    
+    # Risk Metrics
+    print("\n⚠️  RISK METRICS:")
+    print("-" * 40)
+    print(f"  Maximum Drawdown:      {stats['Max Drawdown']:.2%}")
+    print(f"  Best Trade:            {stats['Best Trade']:.2%}")
+    print(f"  Worst Trade:           {stats['Worst Trade']:.2%}")
+    
+    # Trading Statistics
+    print("\n📈 TRADING STATISTICS:")
+    print("-" * 40)
+    print(f"  Total Trades:          {stats['Total Trades']}")
+    print(f"  Win Rate:              {stats['Win Rate']:.2%}")
+    print(f"  Average Trade Return:  {stats['Average Trade Return']:.2%}")
+    print(f"  Profit Factor:         {stats['Profit Factor']:.2f}")
+    
+    print("\n" + "=" * 60)
     # plot equity
     bt.plot_equity(args.output_plot)
     print(f"Equity curve saved to {args.output_plot}")

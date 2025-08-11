@@ -1,6 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from .metrics import compute_returns, sharpe_ratio, max_drawdown
+from .metrics import compute_returns, calculate_all_metrics
 from .utils import save_plot
 import os
 
@@ -15,14 +15,11 @@ class Backtester:
         signals = self.strategy.generate_signals(self.data)
         # calculate returns and equity curve
         strat_ret = compute_returns(signals)
+        # Fill NaN values with 0 for the first period
+        strat_ret = strat_ret.fillna(0)
         equity = (1 + strat_ret).cumprod() * self.initial_capital
-        # compute metrics
-        stats = {
-            'Cumulative Return': equity.iloc[-1] / self.initial_capital - 1,
-            'Sharpe Ratio': sharpe_ratio(strat_ret),
-            'Max Drawdown': max_drawdown(equity),
-            'Total Trades': int(signals['positions'].abs().sum())
-        }
+        # compute comprehensive metrics
+        stats = calculate_all_metrics(strat_ret, equity, signals)
         self.signals = signals
         self.returns = strat_ret
         self.equity = equity
